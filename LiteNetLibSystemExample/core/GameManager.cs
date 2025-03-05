@@ -38,10 +38,12 @@ public partial class GameManager : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        //check for args to override server settings from the input
+        //check for args to override server settings from command line args
         var args = OS.GetCmdlineArgs();
         if (args.Contains("--server"))
             IsServer = true;
+        if (args.Contains("--client"))
+            IsServer = false;
         
         Input.MouseMode = IsPlaying ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
         if (IsServer)

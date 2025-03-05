@@ -11,7 +11,6 @@
 [node name="GameManager" type="Node"]
 script = ExtResource("1_l4r81")
 IsServer = true
-ServerIPAddress = "127.0.0.1"
 
 [node name="SceneManager" type="Node" parent="."]
 script = ExtResource("4_3mcca")

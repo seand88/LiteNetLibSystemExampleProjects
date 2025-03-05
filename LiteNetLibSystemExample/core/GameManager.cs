@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -9,12 +10,12 @@ public enum SupportedOS
     Haiku = 1 << 1,
     iOS = 1 << 2,
     HTML5 = 1 << 3,
-    OSX = 1 << 4,
+    macOS = 1 << 4,
     Server = 1 << 5,
     Windows = 1 << 6,
     UWP = 1 << 7,
     X11 = 1 << 8,
-    Desktop = Windows | UWP | X11 | OSX,
+    Desktop = Windows | UWP | X11 | macOS,
     Mobile = Android | iOS,
     All = Desktop | Mobile | HTML5
 }
@@ -27,7 +28,7 @@ public partial class GameManager : Node
     public static float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
     public static bool IsPlaying = true;
     [Export] public bool IsServer = false;
-    [Export] public string ServerIPAddress = "192.168.1.11";
+    [Export] public string ServerIPAddress = "127.0.0.1";
 
     public GameManager()
     {
@@ -37,6 +38,11 @@ public partial class GameManager : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        //check for args to override server settings from the input
+        var args = OS.GetCmdlineArgs();
+        if (args.Contains("--server"))
+            IsServer = true;
+        
         Input.MouseMode = IsPlaying ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
         if (IsServer)
         {

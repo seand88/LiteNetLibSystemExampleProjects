@@ -66,7 +66,7 @@ public partial class HUDSettings : Control
         CallDeferred(nameof(UpdateContainer));
         InitBaseWindowSize();
         LoadSettings(true);
-        SaveSettings();
+        //SaveSettings();
     }
 
     private void OnOpenSettingsPanel()
@@ -108,9 +108,7 @@ public partial class HUDSettings : Control
 
     private void LoadSettings(bool defaultSettings = false)
     {
-        FileAccess file = FileAccess.Open(_settingsPath, FileAccess.ModeFlags.Read);
-        // Load default settings.
-        if (!FileAccess.FileExists(_settingsPath) || null == file || defaultSettings)
+        if (defaultSettings)
         {
             int viewportWidth = ProjectSettings.GetSetting("display/window/size/viewport_width").AsInt32();
             int viewportHeight = ProjectSettings.GetSetting("display/window/size/viewport_height").AsInt32();
@@ -123,24 +121,41 @@ public partial class HUDSettings : Control
         }
         else
         {
-            int viewportWidth = (int)file.Get32();
-            int viewportHeight = (int)file.Get32();
-            int stretchMode = (int)file.Get32();
-            int stretchAspect = (int)file.Get32();
-            float scaleFactor = (float)file.GetFloat();
-            float guiAspectRatio = (float)file.GetFloat();
-            int maxAspectRatio = (int)file.Get32();
-            float guiMargin = (float)file.GetFloat();
+            FileAccess file = FileAccess.Open(_settingsPath, FileAccess.ModeFlags.Read);
+            // Load default settings.
+            if (!FileAccess.FileExists(_settingsPath) || null == file || defaultSettings)
+            {
+                int viewportWidth = ProjectSettings.GetSetting("display/window/size/viewport_width").AsInt32();
+                int viewportHeight = ProjectSettings.GetSetting("display/window/size/viewport_height").AsInt32();
+                _baseWindowSize = new Vector2I(viewportWidth, viewportHeight);
+                Enum.TryParse(ConvertToCamelCase((string)ProjectSettings.GetSetting("display/window/stretch/mode")), out _stretchMode);
+                Enum.TryParse(ConvertToCamelCase((string)ProjectSettings.GetSetting("display/window/stretch/aspect")), out _stretchAspect);
+                _scaleFactor = ProjectSettings.GetSetting("display/window/stretch/scale").AsSingle();
+                _guiAspectRatio = -1.0f;
+                _guiMargin = 30.0f;
+            }
+            else
+            {
+                int viewportWidth = (int)file.Get32();
+                int viewportHeight = (int)file.Get32();
+                int stretchMode = (int)file.Get32();
+                int stretchAspect = (int)file.Get32();
+                float scaleFactor = (float)file.GetFloat();
+                float guiAspectRatio = (float)file.GetFloat();
+                int maxAspectRatio = (int)file.Get32();
+                float guiMargin = (float)file.GetFloat();
 
-            _baseWindowSize = new Vector2I(viewportWidth, viewportHeight);
-            _stretchMode = (Window.ContentScaleModeEnum)stretchMode;
-            _stretchAspect = (Window.ContentScaleAspectEnum)stretchAspect;
-            _scaleFactor = scaleFactor;
-            _guiAspectRatio = guiAspectRatio;
-            _maxAspectRatioButton.Select(maxAspectRatio);
-            _guiMargin = guiMargin;
+                _baseWindowSize = new Vector2I(viewportWidth, viewportHeight);
+                _stretchMode = (Window.ContentScaleModeEnum)stretchMode;
+                _stretchAspect = (Window.ContentScaleAspectEnum)stretchAspect;
+                _scaleFactor = scaleFactor;
+                _guiAspectRatio = guiAspectRatio;
+                _maxAspectRatioButton.Select(maxAspectRatio);
+                _guiMargin = guiMargin;
+            }
+            
         }
-
+        
         _windowBaseSizeButton.Select(_supportedWindowBaseSize.FindIndex((window) => { return window == _baseWindowSize; }));
         _guiMarginSlider.Value = _guiMargin;
         _guiMarginValue.Text = _guiMargin.ToString();

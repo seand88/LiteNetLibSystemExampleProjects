@@ -112,7 +112,7 @@ public partial class GameClient : Node, INetEventListener
 
     void INetEventListener.OnPeerConnected(NetPeer peer)
     {
-        Debug.Log("[C] Connected to server: " + peer.EndPoint);
+        Debug.Log("[C] Connected to server: " + peer.Address);
         _server = peer;
 
         SendPacket(new JoinPacket { UserName = "Nông Văn Tình" }, DeliveryMethod.ReliableOrdered);

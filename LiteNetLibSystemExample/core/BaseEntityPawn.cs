@@ -3,7 +3,7 @@ using LiteEntitySystem;
 using LiteEntitySystem.Extensions;
 using System.Collections.Generic;
 
-//[UpdateableEntity(true)]
+[EntityFlags(EntityFlags.UpdateOnClient)]
 public partial class BaseEntityPawn : PawnLogic
 {
     [SyncVarFlags(SyncFlags.Interpolated | SyncFlags.LagCompensated)]

@@ -41,9 +41,13 @@ public partial class GameManager : Node
         //check for args to override server settings from command line args
         var args = OS.GetCmdlineArgs();
         if (args.Contains("--server"))
+        {
             IsServer = true;
+        }
         if (args.Contains("--client"))
+        {
             IsServer = false;
+        }
         
         Input.MouseMode = IsPlaying ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
         if (IsServer)

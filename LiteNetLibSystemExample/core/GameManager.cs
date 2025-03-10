@@ -14,7 +14,7 @@ public enum SupportedOS
     Server = 1 << 5,
     Windows = 1 << 6,
     UWP = 1 << 7,
-    X11 = 1 << 8,
+    Linux = 1 << 8,
     Desktop = Windows | UWP | X11 | macOS,
     Mobile = Android | iOS,
     All = Desktop | Mobile | HTML5

@@ -49,7 +49,6 @@ public partial class GameManager : Node
             IsServer = false;
         }
         
-        Input.MouseMode = IsPlaying ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
         if (IsServer)
         {
             AddChild(GameServer.Instance);

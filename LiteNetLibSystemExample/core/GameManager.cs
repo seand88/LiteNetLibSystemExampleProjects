@@ -15,7 +15,7 @@ public enum SupportedOS
     Windows = 1 << 6,
     UWP = 1 << 7,
     Linux = 1 << 8,
-    Desktop = Windows | UWP | X11 | macOS,
+    Desktop = Windows | UWP | Linux | macOS,
     Mobile = Android | iOS,
     All = Desktop | Mobile | HTML5
 }
